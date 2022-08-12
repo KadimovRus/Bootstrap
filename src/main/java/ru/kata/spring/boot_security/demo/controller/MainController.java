@@ -29,7 +29,7 @@ public class MainController {
         Long userId = user.getId();
         user = userService.getUserById(userId);
         model.addAttribute("user", user);
-        return "user.html";
+        return "user";
     }
 
 }
