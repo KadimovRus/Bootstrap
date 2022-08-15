@@ -17,6 +17,7 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
+
         this.userRepository = userRepository;
     }
 
@@ -28,7 +29,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) {
-        User baseUser = getUserById(user.getId());
         user.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -42,5 +42,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        User userToBeUpdated = userRepository.getById(user.getId());
+        userToBeUpdated.setFirstname(user.getFirstname());
+        userToBeUpdated.setLastname(user.getLastname());
+        userToBeUpdated.setAge(user.getAge());
+        userToBeUpdated.setEmail(user.getEmail());
+        userToBeUpdated.setRoles(user.getRoles());
+        System.out.println(user.getRoles());
+        userRepository.flush();
     }
 }

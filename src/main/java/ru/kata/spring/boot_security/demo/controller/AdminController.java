@@ -61,8 +61,8 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user) {
-        userServiceImpl.saveUser(user);
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
+        userServiceImpl.updateUser(user);
         return "redirect:/admin";
     }
 

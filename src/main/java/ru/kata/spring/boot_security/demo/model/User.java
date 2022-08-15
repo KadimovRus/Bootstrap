@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import lombok.Data;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +37,6 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -46,12 +46,8 @@ public class User implements UserDetails {
     private List<Role> roles;
 
     @Override
-    public Set<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities =
-                getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
-                        .collect(Collectors.toSet());
-        return authorities;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles().stream().map(role -> new SimpleGrantedAuthority( role.getAuthority())).collect(Collectors.toList());
     }
 
     @Override
